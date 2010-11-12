@@ -3,7 +3,8 @@
 #
 # Copyright 2008, Puzzle ITC
 # Marcel Härry haerry+puppet(at)puzzle.ch
-# Simon Josi josi+puppet(at)puzzle.ch
+# Copyright 2010, Atizo AG
+# Simon Josi simon.josi+puppet(at)atizo.com
 #
 # This program is free software; you can redistribute 
 # it and/or modify it under the terms of the GNU 
@@ -17,15 +18,11 @@
 #
 
 class postgres {
-    case $operatingsystem {
-        centos: { include postgres::server::centos } 
-        gentoo: { include postgres::server::gentoo } 
-        default: { include postgres::server }
-    }
-    if $use_munin {
-        include postgres::munin
-    }
-    if $use_shorewall {
-        include shorewall::rules::postgres
-    }
+  include postgres::server
+  if $use_munin {
+    include postgres::munin
+  }
+  if $use_shorewall {
+    include shorewall::rules::postgres
+  }
 }
