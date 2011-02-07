@@ -24,11 +24,9 @@ define postgres::default_database(
       before => Postgres::Database[$name],
     }
   } else {
-    Postgres::Role[$real_username]{
-      before => Postgres::Database[$name],
-    }
+    #Postgres::Role[$real_username] -> Postgres::Database[$name]
   }
-  if $alter_public_owner {
+  if $alter_public_owner and ! defined(Exec["postgres_set_public_schema_owner_to_$real_username"]) {
     exec{"postgres_set_public_schema_owner_to_$real_username":
       user => "postgres",
       unless => "psql -d '$name' -c '\\dn' | egrep -q '^ public +\\| $real_username'",
