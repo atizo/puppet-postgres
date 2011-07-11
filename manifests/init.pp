@@ -3,7 +3,7 @@
 #
 # Copyright 2008, Puzzle ITC
 # Marcel Härry haerry+puppet(at)puzzle.ch
-# Copyright 2010, Atizo AG
+# Copyright 2011, Atizo AG
 # Simon Josi simon.josi+puppet(at)atizo.com
 #
 # This program is free software; you can redistribute 
@@ -17,8 +17,18 @@
 # http://github.com/lak/puppet-postgres/tree/master
 #
 
-class postgres {
-  include postgres::server
+class postgres(
+  use_pgdg = false
+) {
+  $version = $use_pgdg
+  if $use_pgdg {
+    class{'yum::repo::pgdg':
+      version => $version,
+    }
+  }
+
+  include postgres::params
+
   if $use_munin {
     include postgres::munin
   }

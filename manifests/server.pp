@@ -1,47 +1,44 @@
 class postgres::server {
-  include postgres::client
-
+  require postgres::client
   package{'postgresql-server':
     ensure => present,
+    name => $postgres::params::package::server,
   }
   service{'postgresql':
     enable => true,
     ensure => running,
     hasstatus => true,
+    name => $postgres::params::service,
     require => Package['postgresql-server'],
   }
   exec{'initialize_postgres_database':
-    command => '/etc/init.d/postgresql start; /etc/init.d/postgresql stop',
-    creates => '/var/lib/pgsql/data/postgresql.conf',
+    command => "/etc/init.d/$postgres::params::service initdb",
+    creates => "$datapath_base/data/postgresql.conf",
     require => Package['postgresql-server'],
     before => [
-      File['/var/lib/pgsql/data/pg_hba.conf'], 
-      File['/var/lib/pgsql/data/postgresql.conf']
+      File["$datapath_base/data/pg_hba.conf"],
+      File["$datapath_base/data/postgresql.conf"]
     ],
   }
-  file{'/var/lib/pgsql/data/postgresql.conf':
-    source => [
-      "puppet://$server/modules/site-postgres/$fqdn/postgresql.conf",
-      "puppet://$server/modules/site-postgres/postgresql.conf",
-      "puppet://$server/modules/postgres/postgresql.conf.$operatingsystem",
-      "puppet://$server/modules/postgres/postgresql.conf"
-    ],
-    notify => Service['postgresql'],
-    require => Package['postgresql-server'],
-    owner => postgres, group => postgres, mode => 0600;
+  file{[
+    "$datapath_base/data/postgresql.conf",
+    "$datapath_base/data/pg_hba.conf",
+  ]:}
+  if $postgres::version {
+    File["$datapath_base/data/postgresql.conf"]{
+      prepend_source => [
+        "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/postgresql.conf",
+        "puppet://$server/modules/site-postgres/$postgres::version/postgresql.conf",
+      ]
+    }
+    File["$datapath_base/data/pg_hba.conf"]{
+      prepend_source => [
+        "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/pg_hba.conf",
+        "puppet://$server/modules/site-postgres/$postgres::version/pg_hba.conf",
+      ]
+    }
   }
-  file{'/var/lib/pgsql/data/pg_hba.conf':
-    source => [
-      "puppet://$server/modules/site-postgres/$fqdn/pg_hba.conf",
-      "puppet://$server/modules/site-postgres/pg_hba.conf",
-      "puppet://$server/modules/postgres/pg_hba.conf.$operatingsystem",
-      "puppet://$server/modules/postgres/pg_hba.conf"
-    ],
-    notify => Service['postgresql'],
-    require => Package['postgresql-server'],
-    owner => postgres, group => postgres, mode => 0600;
-  }
-  file{'/var/lib/pgsql/backups':
+  file{"$datapath_base/backups":
     ensure => directory,
     require => Package['postgresql-server'],
     owner => postgres, group => postgres, mode => 0700;
