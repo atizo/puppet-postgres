@@ -24,9 +24,13 @@ class postgres(
   if $use_pgdg {
     class{'yum::repo::pgdg':
       version => $version,
+      before => [
+        Class['postgresql::client'],
+        Class['postgresql::server'],
+        Class['postgresql::devel'],
+      ],
     }
   }
-
 
   require postgres::params
 
