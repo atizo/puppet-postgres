@@ -1,5 +1,6 @@
 class postgres::server {
-  require postgres::client
+  Class['postgres::server'] <- Class['postgres']
+  Class['postgres::server'] <- Class['postgres::client']
   package{'postgresql-server':
     ensure => present,
     name => $postgres::params::package::server,
