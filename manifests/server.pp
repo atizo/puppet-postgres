@@ -27,20 +27,6 @@ class postgres::server {
     "$postgres::params::datapath_base/data/postgresql.conf",
     "$postgres::params::datapath_base/data/pg_hba.conf",
   ]:}
-  if $postgres::version {
-    Postgres::Configfile["$postgres::params::datapath_base/data/postgresql.conf"]{
-      prepend_source => [
-        "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/postgresql.conf",
-        "puppet://$server/modules/site-postgres/$postgres::version/postgresql.conf",
-      ]
-    }
-    Postgres::Configfile["$postgres::params::datapath_base/data/pg_hba.conf"]{
-      prepend_source => [
-        "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/pg_hba.conf",
-        "puppet://$server/modules/site-postgres/$postgres::version/pg_hba.conf",
-      ]
-    }
-  }
   file{"$postgres::params::datapath_base/backups":
     ensure => directory,
     require => Package['postgresql-server'],

@@ -8,11 +8,12 @@ define postgres::configfile(
     notify => Service['postgresql'],
     require => Package['postgresql-server'],
     source => [
-      #$prepend_source,
+      "puppet://$server/modules/site-postgres$postgres::params::datapath_suffix/$fqdn/$basename",
+      "puppet://$server/modules/site-postgres$postgres::params::datapath_suffix/$basename",
+      "puppet://$server/modules/postgres$postgres::params::datapath_suffix/$basename",
       "puppet://$server/modules/site-postgres/$fqdn/$basename",
       "puppet://$server/modules/site-postgres/$basename",
-      "puppet://$server/modules/postgres/$basename.$operatingsystem",
-      "puppet://$server/modules/postgres/$basename.conf",
+      "puppet://$server/modules/postgres/$basename",
     ],
     owner => postgres, group => postgres, mode => 0600;
   }
