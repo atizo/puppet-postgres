@@ -7,7 +7,7 @@ define postgres::configfile(
     ensure => $ensure,
     notify => Service['postgresql'],
     require => Package['postgresql-server'],
-    $source = [
+    source => [
       #$prepend_source,
       "puppet://$server/modules/site-postgres/$fqdn/$basename",
       "puppet://$server/modules/site-postgres/$basename",
