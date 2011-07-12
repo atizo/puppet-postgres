@@ -18,7 +18,7 @@ class postgres::server {
     creates => "$postgres::params::datapath_base/data/postgresql.conf",
     require => Package['postgresql-server'],
     before => [
-      Service['postgresql-server'],
+      Service['postgresql'],
       File["$postgres::params::datapath_base/data/pg_hba.conf"],
       File["$postgres::params::datapath_base/data/postgresql.conf"],
     ],
