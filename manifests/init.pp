@@ -27,6 +27,7 @@ class postgres(
     }
   }
 
+
   require postgres::params
 
   if $use_munin {
