@@ -25,9 +25,9 @@ class postgres(
     class{'yum::repo::pgdg':
       version => $version,
       before => [
-        Class['postgresql::client'],
-        Class['postgresql::server'],
-        Class['postgresql::devel'],
+        Class['postgres::client'],
+        Class['postgres::server'],
+        Class['postgres::devel'],
       ],
     }
   }
