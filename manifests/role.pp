@@ -1,13 +1,12 @@
 define postgres::role(
-  $ensure,
+  $ensure = present,
   $options = '',
   $password = false
 ) {
-  $passtext = $password ? {
-    false => "",
-    default => "ENCRYPTED PASSWORD '$password'"
-  }
   require postgres
+  if $password {
+    $passtext = "ENCRYPTED PASSWORD '$password'"
+  }
   case $ensure {
     present: {
       # The createuser command always prompts for the password.

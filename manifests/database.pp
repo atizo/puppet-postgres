@@ -1,11 +1,10 @@
 define postgres::database(
-  $ensure, 
+  $ensure = present,
   $owner = false
 ) {
   require postgres::server
-  $ownerstring = $owner ? {
-    false => "",
-    default => "-O $owner"
+  if $owner {
+    $ownerstring = "-O $owner"
   }
   case $ensure {
     present: {
