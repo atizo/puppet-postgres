@@ -1,6 +1,7 @@
 class postgres::server {
   Class['postgres::server'] <- Class['postgres']
   Class['postgres::server'] <- Class['postgres::client']
+  include postgres::client
   package{'postgresql-server':
     ensure => present,
     name => $postgres::params::package::server,
@@ -14,39 +15,39 @@ class postgres::server {
   }
   exec{'initialize_postgres_database':
     command => "/etc/init.d/$postgres::params::service initdb",
-    creates => "$datapath_base/data/postgresql.conf",
+    creates => "$postgres::params::datapath_base/data/postgresql.conf",
     require => Package['postgresql-server'],
     before => [
-      File["$datapath_base/data/pg_hba.conf"],
-      File["$datapath_base/data/postgresql.conf"],
+      File["$postgres::params::datapath_base/data/pg_hba.conf"],
+      File["$postgres::params::datapath_base/data/postgresql.conf"],
     ],
   }
   postgres::configfile{[
-    "$datapath_base/data/postgresql.conf",
-    "$datapath_base/data/pg_hba.conf",
+    "$postgres::params::datapath_base/data/postgresql.conf",
+    "$postgres::params::datapath_base/data/pg_hba.conf",
   ]:}
   if $postgres::version {
-    Postgres::Configile["$datapath_base/data/postgresql.conf"]{
+    Postgres::Configfile["$postgres::params::datapath_base/data/postgresql.conf"]{
       prepend_source => [
         "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/postgresql.conf",
         "puppet://$server/modules/site-postgres/$postgres::version/postgresql.conf",
       ]
     }
-    Postgres::Configfile["$datapath_base/data/pg_hba.conf"]{
+    Postgres::Configfile["$postgres::params::datapath_base/data/pg_hba.conf"]{
       prepend_source => [
         "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/pg_hba.conf",
         "puppet://$server/modules/site-postgres/$postgres::version/pg_hba.conf",
       ]
     }
   }
-  file{"$datapath_base/backups":
+  file{"$postgres::params::datapath_base/backups":
     ensure => directory,
     require => Package['postgresql-server'],
     owner => postgres, group => postgres, mode => 0700;
   }
   file{'/etc/cron.d/pgsql_backup.cron':
     source => "puppet://$server/modules/postgres/pgsql_backup.cron",
-    require => File['/var/lib/pgsql/backups'],
+    require => File["$postgres::params::datapath_base/backups"],
     owner => root, group => 0, mode => 0600;
   }
   file{'/etc/cron.d/pgsql_vacuum.cron':

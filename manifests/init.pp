@@ -27,7 +27,7 @@ class postgres(
     }
   }
 
-  include postgres::params
+  require postgres::params
 
   if $use_munin {
     include postgres::munin
