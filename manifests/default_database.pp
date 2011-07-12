@@ -12,7 +12,6 @@ define postgres::default_database(
   } else {
     $real_username = $name
   }
-  Class['postgres::role'] -> Class['postgres::database']
   postgres::database{$name:
     ensure => $ensure,
     owner => $real_username,
@@ -22,13 +21,20 @@ define postgres::default_database(
       password => $password,
       ensure => $ensure,
     }
+  } else {
+    Postgres::Database[$name]{
+      require => Postgres::Role[$real_username]
+    }
   }
   if $alter_public_owner {
     exec{"postgres_set_public_schema_owner_to_${real_username}_for_$name":
       user => "postgres",
       unless => "psql -d '$name' -c '\\dn' | egrep -q '^ public +\\| $real_username'",
       command => "psql -d '$name' -c 'ALTER SCHEMA public OWNER TO $real_username'",
-      require => Postgres::Database[$name],
+      require => [
+        Postgres::Role[$name],
+        Postgres::Database[$name],
+      ],
     }
   }
 }

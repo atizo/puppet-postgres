@@ -2,7 +2,6 @@ define postgres::database(
   $ensure = present,
   $owner = false
 ) {
-  require postgres::server
   if $owner {
     $ownerstring = "-O $owner"
   }
