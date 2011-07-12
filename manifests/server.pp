@@ -17,21 +17,21 @@ class postgres::server {
     require => Package['postgresql-server'],
     before => [
       File["$datapath_base/data/pg_hba.conf"],
-      File["$datapath_base/data/postgresql.conf"]
+      File["$datapath_base/data/postgresql.conf"],
     ],
   }
-  file{[
+  postgres::configfile{[
     "$datapath_base/data/postgresql.conf",
     "$datapath_base/data/pg_hba.conf",
   ]:}
   if $postgres::version {
-    File["$datapath_base/data/postgresql.conf"]{
+    Postgres::Configile["$datapath_base/data/postgresql.conf"]{
       prepend_source => [
         "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/postgresql.conf",
         "puppet://$server/modules/site-postgres/$postgres::version/postgresql.conf",
       ]
     }
-    File["$datapath_base/data/pg_hba.conf"]{
+    Postgres::Configfile["$datapath_base/data/pg_hba.conf"]{
       prepend_source => [
         "puppet://$server/modules/site-postgres/$postgres::version/$fqdn/pg_hba.conf",
         "puppet://$server/modules/site-postgres/$postgres::version/pg_hba.conf",
