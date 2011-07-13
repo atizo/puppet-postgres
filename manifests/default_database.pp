@@ -15,15 +15,12 @@ define postgres::default_database(
   postgres::database{$name:
     ensure => $ensure,
     owner => $real_username,
+    require => Postgres::Role[$real_username],
   }
   if $password {
     postgres::role{$real_username:
       password => $password,
       ensure => $ensure,
-    }
-  } else {
-    Postgres::Database[$name]{
-      require => Postgres::Role[$real_username]
     }
   }
   if $alter_public_owner {
