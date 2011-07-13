@@ -1,5 +1,9 @@
 class postgres::server {
-  Class['postgres::server'] <- Class['postgres::client'] <- Class['postgres']
+  Class['postgres::server'] <- Class['postgres']
+  Class['postgres::server'] <- Class['postgres::client']
+  if $use_pgdg {
+    Class['postgres::server'] <- Class['postgres::yum_pgdg']
+  }
   include postgres::client
   package{'postgresql-server':
     ensure => present,
