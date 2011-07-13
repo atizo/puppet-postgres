@@ -9,7 +9,7 @@ class postgres::yum_pgdg inherits yum::repo::dist {
   }
   Yum::Repo[
     'centos-base',
-    'centos-updates',
+    'centos-updates'
   ]{
     exclude => 'postgresql*',
     before => [

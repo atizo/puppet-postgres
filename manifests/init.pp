@@ -22,9 +22,8 @@ class postgres(
   version = false
 ) {
   if $use_pgdg {
-    include postgres::yum_pgdg
+    require postgres::yum_pgdg
   }
-
   require postgres::params
 
   if $use_munin {
