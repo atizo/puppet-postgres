@@ -21,8 +21,6 @@ class postgres(
   use_pgdg = false,
   version = false
 ) {
-  Class['postgres'] -> Class['postgres::client'] -> Class['postgres::server']
-  Class['postgres'] -> Class['postgres::devel']
   if $use_pgdg {
     require postgres::yum_pgdg
   }

@@ -1,6 +1,5 @@
 class postgres::server {
-  Class['postgres::server'] <- Class['postgres']
-  Class['postgres::server'] <- Class['postgres::client']
+  Class['postgres::server'] <- Class['postgres::client'] <- Class['postgres']
   include postgres::client
   package{'postgresql-server':
     ensure => present,
