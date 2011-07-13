@@ -18,18 +18,11 @@
 #
 
 class postgres(
-  use_pgdg = false
+  use_pgdg = false,
+  version = false
 ) {
-  $version = $use_pgdg
   if $use_pgdg {
-    class{'yum::repo::pgdg':
-      version => $version,
-      before => [
-        Class['postgres::client'],
-        Class['postgres::server'],
-        Class['postgres::devel'],
-      ],
-    }
+    include postgres::yum_pgdg
   }
 
   require postgres::params
