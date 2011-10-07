@@ -1,4 +1,5 @@
 class postgres::yum_pgdg inherits yum::repo::dist {
+  include postgres::devel
   class{'yum::repo::pgdg':
     version => $postgres::version,
     before => [
