@@ -1,1 +1,1 @@
-45 23 * * * postgres /usr/bin<%= scope.lookupvar("postgres::params::binary_suffix") %>/pg_dumpall > <%= scope.lookupvar("postgres::params::datapath_base") %>/backups/pg_dumpall.sql && chmod 600 /var/lib/pgsql/backups/pg_dumpall.sql
+45 23 * * * postgres /usr/bin<%= scope.lookupvar("postgres::params::binary_path_prefix") %>/pg_dumpall > <%= scope.lookupvar("postgres::params::datapath_base") %>/backups/pg_dumpall.sql && chmod 600 /var/lib/pgsql/backups/pg_dumpall.sql
