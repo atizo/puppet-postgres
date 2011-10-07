@@ -10,7 +10,7 @@ class postgres::devel {
   if $postgres::version {
     file{'/usr/bin/pg_config':
       ensure => "/usr$postgres::params::binary_path_prefix/bin/pg_config",
-      require => Package['postgres-devel'],
+      require => Package['postgresql-devel'],
     }
   }
 }
