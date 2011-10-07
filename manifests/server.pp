@@ -36,12 +36,12 @@ class postgres::server {
     owner => postgres, group => postgres, mode => 0700;
   }
   file{'/etc/cron.d/pgsql_backup.cron':
-    source => "puppet://$server/modules/postgres/pgsql_backup.cron",
+    content => template('postgres/pgsql_backup.cron.erb'),
     require => File["$postgres::params::datapath_base/backups"],
     owner => root, group => 0, mode => 0600;
   }
   file{'/etc/cron.d/pgsql_vacuum.cron':
-    source => "puppet://$server/modules/postgres/pgsql_vacuum.cron",
+    content => template('postgres/pgsql_vacuum.cron.erb'),
     require => Package['postgresql-server'],
     owner => root, group => 0, mode => 0600;
   }

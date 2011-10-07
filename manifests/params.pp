@@ -3,7 +3,7 @@ class postgres::params{
     $package_suffix = regsubst($postgres::version, '\.','', 'G')
     $service_suffix = "-$postgres::version"     
     $datapath_suffix = "/$postgres::version"
-    $binary_suffix = "/pgsql-$postgres::version"
+    $binary_path_prefix = "/pgsql-$postgres::version"
   }
   $datapath_base = "/var/lib/pgsql$datapath_suffix"
   $service = "postgresql$service_suffix"
