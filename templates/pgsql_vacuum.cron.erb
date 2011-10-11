@@ -1,1 +1,1 @@
-30 4 * * *  postgres  /usr<%= scope.lookupvar("postgres::params::binary_path_prefix") %>/bin/vacuumdb -azf
+30 4 * * *  postgres  /usr<%= scope.lookupvar("postgres::params::binary_path_prefix") %>/bin/vacuumdb -azf | egrep -v 'vacuuming database|VACUUM'
