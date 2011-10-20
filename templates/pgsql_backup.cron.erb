@@ -1,2 +1,2 @@
-<% binary_path_prefix = has_variable?("postgres::params::binary_path_prefix") ? scope.lookupvar("postgres::params::datapath_base") : '' %>
+<% binary_path_prefix = has_variable?("postgres::params::binary_path_prefix") ? scope.lookupvar("postgres::params::binary_path_prefix") : '' %>
 45 23 * * * postgres /usr<%= binary_path_prefix %>/bin/pg_dumpall > <%= scope.lookupvar("postgres::params::datapath_base") %>/backups/pg_dumpall.sql && chmod 600 <%= scope.lookupvar("postgres::params::datapath_base") %>/backups/pg_dumpall.sql
