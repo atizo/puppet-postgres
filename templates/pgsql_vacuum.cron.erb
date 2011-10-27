@@ -1,2 +1,2 @@
 <% binary_path_prefix = has_variable?("postgres::params::binary_path_prefix") ? scope.lookupvar("postgres::params::binary_path_prefix") : '' %>
-30 4 * * *  postgres  /usr<%= binary_path_prefix %>/bin/vacuumdb -azf | egrep -v 'vacuuming database|VACUUM'
+30 4 * * *  postgres  /usr<%= binary_path_prefix %>/bin/vacuumdb -azf 2>&1 | egrep -v 'vacuuming database|VACUUM'
