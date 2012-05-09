@@ -29,7 +29,7 @@ define postgres::default_database(
       unless => "psql -d '$name' -c '\\dn' | egrep -q '^ public +\\| $real_username'",
       command => "psql -d '$name' -c 'ALTER SCHEMA public OWNER TO $real_username'",
       require => [
-        Postgres::Role[$name],
+        Postgres::Role[$real_username],
         Postgres::Database[$name],
       ],
     }
