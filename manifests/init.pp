@@ -23,7 +23,9 @@ class postgres(
 ) {
   require postgres::params
   if $use_pgdg {
-    include postgres::yum_pgdg
+    class{'postgres::yum_pgdg':
+      stage => 'setup',
+    }
   }
 
   if $use_munin {
